@@ -7,6 +7,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -28,10 +29,25 @@ class AdminPanelProvider extends PanelProvider
             ->login()
 
             ->brandName('E-Surat BKAD')
+            ->favicon(asset('images/logo-bkad.png'))
 
             ->colors([
                 'primary' => Color::Amber,
             ])
+
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label('Persuratan')
+                    ->icon('heroicon-o-envelope'),
+                NavigationGroup::make()
+                    ->label('Laporan')
+                    ->icon('heroicon-o-document-chart-bar'),
+                NavigationGroup::make()
+                    ->label('Pengaturan')
+                    ->icon('heroicon-o-cog-6-tooth'),
+            ])
+
+            ->sidebarCollapsibleOnDesktop()
 
             ->discoverResources(
                 in: app_path('Filament/Resources'),

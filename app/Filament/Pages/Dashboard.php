@@ -22,6 +22,6 @@ class Dashboard extends BaseDashboard
 
     public function getColumns(): array|int
     {
-        return 2;
+        return 1;
     }
 }

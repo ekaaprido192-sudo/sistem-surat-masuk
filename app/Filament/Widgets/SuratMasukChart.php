@@ -9,6 +9,10 @@ class SuratMasukChart extends ChartWidget
 {
     protected ?string $heading = 'Grafik Surat Masuk per Bulan';
 
+    protected int | string | array $columnSpan = 'full';
+
+    protected ?string $maxHeight = '300px';
+
     protected function getData(): array
     {
         $data = [];
@@ -22,6 +26,10 @@ class SuratMasukChart extends ChartWidget
                 [
                     'label' => 'Jumlah Surat Masuk',
                     'data' => $data,
+                    'borderColor' => '#d97706',
+                    'backgroundColor' => 'rgba(217, 119, 6, 0.1)',
+                    'fill' => 'start',
+                    'tension' => 0.4,
                 ],
             ],
             'labels' => [

@@ -8,10 +8,11 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class SuratMasukStats extends StatsOverviewWidget
 {
+    protected int | string | array $columnSpan = 'full';
+
     protected function getStats(): array
     {
         return [
-
             Stat::make('📥 Total Surat Masuk', SuratMasuk::count())
                 ->description('Seluruh surat yang diterima')
                 ->descriptionIcon('heroicon-m-envelope')
@@ -35,7 +36,6 @@ class SuratMasukStats extends StatsOverviewWidget
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color('success')
                 ->chart([1, 2, 3, 4, 5, 6, 7]),
-
         ];
     }
 
