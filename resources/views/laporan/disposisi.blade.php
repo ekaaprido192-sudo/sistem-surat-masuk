@@ -1,131 +1,284 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
-    <title>Laporan Disposisi Surat</title>
+    <title>Laporan Disposisi BKAD Kota Bogor</title>
+
     <style>
+        @page {
+            margin: 20px 25px;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            margin: 20px;
-        }
-        .header {
-            text-align: center;
-            line-height: 1.3;
-        }
-        .header h2 {
+            font-family: DejaVu Sans, Arial, Helvetica, sans-serif;
+            font-size: 9px;
+            color: #000;
             margin: 0;
-            font-size: 16px;
-            text-transform: uppercase;
+            padding: 0;
+            line-height: 1.2;
         }
-        .header h3 {
-            margin: 0;
-            font-size: 18px;
-            text-transform: uppercase;
+
+        /* KOP SURAT */
+        .kop-wrapper {
+            width: 100%;
+            margin-bottom: 2px;
         }
-        .header p {
-            margin: 5px 0 0;
-            font-size: 11px;
-        }
-        .line {
-            border-bottom: 2px solid #000;
-            margin: 10px 0 20px;
-        }
-        .title {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .title h4 {
-            margin: 0;
-            font-size: 14px;
-            text-transform: uppercase;
-        }
-        .title p {
-            margin: 5px 0 0;
-            font-size: 11px;
-        }
-        table {
+
+        .kop-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
         }
-        table, th, td {
-            border: 1px solid #000;
+
+        .kop-table td {
+            border: none;
+            padding: 0;
+            vertical-align: middle;
         }
-        th, td {
-            padding: 8px;
+
+        .logo-col {
+            width: 80px;
             text-align: left;
         }
-        th {
-            background-color: #f2f2f2;
+
+        .logo-bkad {
+            width: 70px;
+            height: auto;
+            display: block;
+        }
+
+        .instansi-col {
             text-align: center;
         }
+
+        .instansi-col h2 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .instansi-col h1 {
+            margin: 2px 0;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .instansi-col p {
+            margin: 1px 0;
+            font-size: 9px;
+            color: #222;
+        }
+
+        /* GARIS PEMBATAS KOP */
+        .garis-kop {
+            border-top: 2.5px solid #000;
+            border-bottom: 0.8px solid #000;
+            height: 2px;
+            margin-top: 5px;
+            margin-bottom: 12px;
+        }
+
+        /* JUDUL LAPORAN */
+        .judul-laporan {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .judul-laporan h3 {
+            margin: 0;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-decoration: underline;
+        }
+
+        .judul-laporan p {
+            margin: 4px 0 0 0;
+            font-size: 9px;
+        }
+
+        /* INFO METADATA */
+        .info-table {
+            width: 280px;
+            margin-bottom: 8px;
+            border-collapse: collapse;
+            font-size: 9px;
+        }
+
+        .info-table td {
+            border: none;
+            padding: 1.5px 0;
+        }
+
+        /* TABEL DATA */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8.5px;
+        }
+
+        .data-table th {
+            border: 1px solid #000;
+            background-color: #f2f2f2;
+            padding: 5px 4px;
+            text-align: center;
+            vertical-align: middle;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .data-table td {
+            border: 1px solid #000;
+            padding: 4px 5px;
+            vertical-align: top;
+        }
+
         .text-center {
             text-align: center;
         }
-        .ttd-container {
-            width: 100%;
-            float: right;
+
+        .font-semibold {
+            font-weight: bold;
         }
+
+        /* TANDA TANGAN */
+        .ttd-wrapper {
+            margin-top: 20px;
+            width: 100%;
+            page-break-inside: avoid;
+        }
+
         .ttd-box {
+            width: 230px;
             float: right;
-            width: 250px;
             text-align: center;
         }
-        .ttd-space {
+
+        .space-ttd {
             height: 60px;
+        }
+
+        .clear {
+            clear: both;
         }
     </style>
 </head>
+
 <body>
 
-    <!-- Kop Surat -->
-    <div class="header">
-        <h2>Pemerintah Kabupaten / Kota</h2>
-        <h3>Badan Pengelolaan Keuangan dan Aset Daerah</h3>
-        <p>Jl. Jendral Sudirman No. 123, Telp. (021) 1234567, Fax. (021) 7654321</p>
+    {{-- KOP SURAT --}}
+    <div class="kop-wrapper">
+        <table class="kop-table">
+            <tr>
+                <td class="logo-col">
+                    @php
+                        $logoPath = public_path('images/logo-bkad.png');
+                    @endphp
+                    @if (file_exists($logoPath))
+                        <img src="data:image/png;base64,{{ base64_encode(file_get_contents($logoPath)) }}" class="logo-bkad" alt="Logo">
+                    @endif
+                </td>
+                <td class="instansi-col">
+                    <h2>PEMERINTAH KOTA BOGOR</h2>
+                    <h1>BADAN KEUANGAN DAN ASET DAERAH</h1>
+                    <p>Jl. Pemuda No.31, RT.01/RW.06, Tanah Sareal, Kota Bogor, Jawa Barat 16162</p>
+                    <p>Telepon: (0251) 8323099 | Pos-el: bkad@kotabogor.go.id</p>
+                </td>
+            </tr>
+        </table>
     </div>
-    <div class="line"></div>
 
-    <!-- Judul & Periode -->
-    <div class="title">
-        <h4>Laporan Disposisi Surat</h4>
-        <p>Periode: {{ $tglMulai ? \Carbon\Carbon::parse($tglMulai)->locale('id')->translatedFormat('d F Y') : '-' }} s/d {{ $tglSelesai ? \Carbon\Carbon::parse($tglSelesai)->locale('id')->translatedFormat('d F Y') : '-' }}</p>
+    <div class="garis-kop"></div>
+
+    {{-- JUDUL DOKUMEN --}}
+    <div class="judul-laporan">
+        <h3>LAPORAN DISPOSISI SURAT</h3>
+        <p>
+            Periode: 
+            <strong>
+                @if ($tglMulai)
+                    {{ \Carbon\Carbon::parse($tglMulai)->locale('id')->translatedFormat('d F Y') }}
+                @else
+                    Semua Data
+                @endif
+                s/d
+                @if ($tglSelesai)
+                    {{ \Carbon\Carbon::parse($tglSelesai)->locale('id')->translatedFormat('d F Y') }}
+                @else
+                    Semua Data
+                @endif
+            </strong>
+        </p>
     </div>
 
-    <!-- Tabel Data -->
-    <table>
+    {{-- INFO CETAK --}}
+    <table class="info-table">
+        <tr>
+            <td width="90">Tanggal Cetak</td>
+            <td width="10">:</td>
+            <td>{{ now()->locale('id')->translatedFormat('d F Y H:i') }} WIB</td>
+        </tr>
+        <tr>
+            <td>Total Disposisi</td>
+            <td>:</td>
+            <td><strong>{{ $disposisi->count() }} Data</strong></td>
+        </tr>
+    </table>
+
+    {{-- TABEL DATA DISPOSISI --}}
+    <table class="data-table">
         <thead>
             <tr>
-                <th style="width: 5%;">No</th>
-                <th style="width: 20%;">Tgl. Disposisi</th>
-                <th style="width: 35%;">Tujuan / Penerima</th>
-                <th style="width: 40%;">Isi Disposisi</th>
+                <th width="4%">No</th>
+                <th width="10%">Tanggal</th>
+                <th width="18%">Nomor Surat</th>
+                <th width="18%">Perihal</th>
+                <th width="15%">Tujuan</th>
+                <th width="10%">Sifat</th>
+                <th width="25%">Instruksi</th>
             </tr>
         </thead>
         <tbody>
             @forelse($disposisi as $index => $item)
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
-                    <td class="text-center">{{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d/m/Y') }}</td>
-                    <td>{{ $item->tujuan ?? $item->penerima ?? '-' }}</td>
-                    <td>{{ $item->isi_disposisi ?? $item->catatan ?? '-' }}</td>
+                    <td class="text-center">
+                        {{ $item->tgl_disposisi ? \Carbon\Carbon::parse($item->tgl_disposisi)->format('d/m/Y') : '-' }}
+                    </td>
+                    <td>{{ $item->suratMasuk?->nomor_surat ?? '-' }}</td>
+                    <td>{{ $item->suratMasuk?->perihal ?? '-' }}</td>
+                    <td>{{ $item->tujuan_bidang ?? '-' }}</td>
+                    <td class="text-center font-semibold">{{ $item->sifat ?? '-' }}</td>
+                    <td>{{ $item->instruksi ?? '-' }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" class="text-center">Tidak ada data disposisi pada periode ini.</td>
+                    <td colspan="7" class="text-center" style="padding: 15px;">
+                        <em>Tidak ada data disposisi pada periode yang dipilih.</em>
+                    </td>
                 </tr>
             @endforelse
         </tbody>
     </table>
 
-    <!-- Area Tanda Tangan -->
-    <div class="ttd-container">
+    {{-- TANDA TANGAN PEJABAT --}}
+    <div class="ttd-wrapper">
         <div class="ttd-box">
-            <p>{{ now()->locale('id')->translatedFormat('d F Y') }}<br>Kepala BKAD,</p>
-            <div class="ttd-space"></div>
-            <p><strong><u>( NAMA KEPALA DINAS )</u></strong><br>NIP. 19800101 200501 1 001</p>
+            <p style="margin: 0;">Bogor, {{ now()->locale('id')->translatedFormat('d F Y') }}</p>
+            <p style="margin: 3px 0 0 0;">Kepala BKAD Kota Bogor,</p>
+            <div class="space-ttd"></div>
+            <p style="margin: 0; font-weight: bold; text-decoration: underline;">
+                {{ $pejabatTtd ?? 'Lia Kania Dewi, S.Si., M.M.' }}
+            </p>
+            <p style="margin: 2px 0 0 0;">
+                NIP. {{ $nipPejabat ?? '__________________________' }}
+            </p>
         </div>
+        <div class="clear"></div>
     </div>
 
 </body>

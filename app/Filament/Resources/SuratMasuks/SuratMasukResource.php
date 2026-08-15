@@ -8,13 +8,29 @@ use App\Filament\Resources\SuratMasuks\Pages\ListSuratMasuks;
 use App\Filament\Resources\SuratMasuks\Schemas\SuratMasukForm;
 use App\Filament\Resources\SuratMasuks\Tables\SuratMasuksTable;
 use App\Models\SuratMasuk;
+use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class SuratMasukResource extends Resource
 {
     protected static ?string $model = SuratMasuk::class;
+
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-envelope';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Persuratan';
+
+    protected static ?string $navigationLabel = 'Surat Masuk';
+
+    protected static ?string $modelLabel = 'Surat Masuk';
+
+    protected static ?string $pluralModelLabel = 'Surat Masuk';
+
+    protected static ?string $recordTitleAttribute = 'nomor_surat';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {
@@ -38,5 +54,14 @@ class SuratMasukResource extends Resource
             'create' => CreateSuratMasuk::route('/create'),
             'edit' => EditSuratMasuk::route('/{record}/edit'),
         ];
+    }
+
+    public static function canAccess(): bool
+    {
+        return auth()->check() &&
+            in_array(auth()->user()->role, [
+                'Admin',
+                'Staf',
+            ], true);
     }
 }

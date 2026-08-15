@@ -2,13 +2,14 @@
 
 namespace App\Filament\Pages;
 
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
+use BackedEnum;
+use UnitEnum;
 use Filament\Pages\Page;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Schemas\Components\Section;
 
 class LaporanSurat extends Page implements HasForms
 {
@@ -16,115 +17,86 @@ class LaporanSurat extends Page implements HasForms
 
     protected string $view = 'filament.pages.laporan-surat';
 
-    public static function getNavigationIcon(): ?string
-    {
-        return 'heroicon-o-document-text';
-    }
+    protected static ?string $navigationLabel = 'Laporan Cetak & Export';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Laporan';
-    }
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-document-text';
 
-    public function getTitle(): string
-    {
-        return 'Laporan Surat & Disposisi';
-    }
+    protected static string|UnitEnum|null $navigationGroup = 'Laporan';
+
+    protected static ?int $navigationSort = 1;
 
     public ?array $suratMasukData = [];
+
     public ?array $disposisiData = [];
 
     public function mount(): void
     {
-        $this->suratMasukForm->fill();
-        $this->disposisiForm->fill();
-    }
+        $this->suratMasukData = [
+            'tgl_mulai' => now()->startOfMonth(),
+            'tgl_selesai' => now(),
+        ];
 
-    protected function getForms(): array
-    {
-        return [
-            'suratMasukForm',
-            'disposisiForm',
+        $this->disposisiData = [
+            'tgl_mulai' => now()->startOfMonth(),
+            'tgl_selesai' => now(),
         ];
     }
 
-    // Form 1: Surat Masuk
-    public function suratMasukForm(Form|Schema $form): Form|Schema
+    public function suratMasukForm(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->statePath('suratMasukData')
+            ->components([
                 Section::make('Laporan Surat Masuk')
-                    ->description('Filter dan cetak laporan surat masuk berdasarkan rentang tanggal')
                     ->schema([
                         DatePicker::make('tgl_mulai')
                             ->label('Tanggal Mulai')
                             ->required(),
+
                         DatePicker::make('tgl_selesai')
                             ->label('Tanggal Selesai')
                             ->required(),
                     ])
                     ->columns(2),
-            ])
-            ->statePath('suratMasukData');
+            ]);
     }
 
-    // Form 2: Disposisi
-    public function disposisiForm(Form|Schema $form): Form|Schema
+    public function disposisiForm(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->statePath('disposisiData')
+            ->components([
                 Section::make('Laporan Disposisi')
-                    ->description('Filter dan cetak laporan disposisi berdasarkan rentang tanggal')
                     ->schema([
                         DatePicker::make('tgl_mulai')
                             ->label('Tanggal Mulai')
                             ->required(),
+
                         DatePicker::make('tgl_selesai')
                             ->label('Tanggal Selesai')
                             ->required(),
                     ])
                     ->columns(2),
-            ])
-            ->statePath('disposisiData');
+            ]);
     }
 
     public function cetakSuratMasuk()
     {
-        $data = $this->suratMasukForm->getState();
-
-        return redirect()->route('laporan.surat-masuk', [
-            'tgl_mulai' => $data['tgl_mulai'] ?? null,
-            'tgl_selesai' => $data['tgl_selesai'] ?? null,
-        ]);
+        return redirect()->route('laporan.surat-masuk', $this->suratMasukData);
     }
 
     public function exportExcelSuratMasuk()
     {
-        $data = $this->suratMasukForm->getState();
-
-        return redirect()->route('laporan.surat-masuk.excel', [
-            'tgl_mulai' => $data['tgl_mulai'] ?? null,
-            'tgl_selesai' => $data['tgl_selesai'] ?? null,
-        ]);
+        return redirect()->route('laporan.surat-masuk.excel', $this->suratMasukData);
     }
 
     public function cetakDisposisi()
     {
-        $data = $this->disposisiForm->getState();
-
-        return redirect()->route('laporan.disposisi', [
-            'tgl_mulai' => $data['tgl_mulai'] ?? null,
-            'tgl_selesai' => $data['tgl_selesai'] ?? null,
-        ]);
+        return redirect()->route('laporan.disposisi', $this->disposisiData);
     }
 
     public function exportExcelDisposisi()
     {
-        $data = $this->disposisiForm->getState();
-
-        return redirect()->route('laporan.disposisi.excel', [
-            'tgl_mulai' => $data['tgl_mulai'] ?? null,
-            'tgl_selesai' => $data['tgl_selesai'] ?? null,
-        ]);
+        return redirect()->route('laporan.disposisi.excel', $this->disposisiData);
     }
 }

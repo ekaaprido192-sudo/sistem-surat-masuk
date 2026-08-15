@@ -12,16 +12,39 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('surat_masuks', function (Blueprint $table) {
+
             $table->id();
-            $table->string('nomor_surat');
+
+            // Nomor surat dibuat unik agar tidak ada data ganda
+            $table->string('nomor_surat')->unique();
+
             $table->date('tanggal_surat');
+
             $table->date('tanggal_diterima');
+
             $table->string('asal_surat');
+
             $table->string('perihal');
+
             $table->string('tujuan');
-            $table->enum('sifat', ['Biasa', 'Penting', 'Rahasia']);
+
+            $table->enum('sifat', [
+                'Biasa',
+                'Penting',
+                'Rahasia',
+            ]);
+
+            // Menyimpan lokasi file PDF
             $table->string('file_surat')->nullable();
-            $table->enum('status', ['Baru', 'Diproses', 'Selesai'])->default('Baru');
+
+            $table->enum('status', [
+                'Baru',
+                'Diproses',
+                'Selesai',
+            ])
+            ->default('Baru')
+            ->index();
+
             $table->timestamps();
         });
     }
